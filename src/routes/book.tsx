@@ -63,7 +63,7 @@ function PublicBookingPage() {
     const { data, error: rpcError } = await (supabase as any).rpc("submit_public_booking", {
       p_outlet_id: outletId,
       p_customer_name: name.trim(),
-      p_customer_phone: phone.replace(/\\D/g, ""),
+      p_customer_phone: phone.replace(/\D/g, ""),
       p_service_id: serviceId,
       p_barber_id: barberId || null,
       p_booking_date: date,
