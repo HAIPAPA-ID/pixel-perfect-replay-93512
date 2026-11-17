@@ -51,7 +51,7 @@ export function OwnerDashboard() {
 
   const view = useMemo(() => {
     const totals = sumTotals(data.daily, range, scope);
-    const barbers = buildBarberRanking(data.daily, range, data.barbers, data.outlets, scope, data.commissionRate);
+    const barbers = buildBarberRanking(data.daily, range, data.barbers, data.outlets, scope, data.commissionRate, data.barberDaily);
     const commissions = barbers.reduce((s, b) => s + b.commission, 0);
     return {
       overview: buildOverview(data.daily, data.today, scope),
