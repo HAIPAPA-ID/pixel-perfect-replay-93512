@@ -23,7 +23,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <AppSidebar />
         <SidebarInset className="min-w-0 bg-surface">
           <AppHeader />
-          <main className="flex-1">{allowed ? children : <AccessDenied role={user.role} />}</main>
+          <div className="flex-1">{allowed ? children : <AccessDenied role={user.role} />}</div>
         </SidebarInset>
       </div>
     </SidebarProvider>
