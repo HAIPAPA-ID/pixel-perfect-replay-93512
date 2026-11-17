@@ -10,7 +10,7 @@ import { AppSidebar } from "./app-sidebar";
 import { NAV_ITEMS } from "./nav-config";
 
 /** Pages rendered without the sidebar/header shell. */
-const BARE_PATHS = ["/auth"];
+const BARE_PATHS = ["/auth", "/book"];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { user } = useSession();
