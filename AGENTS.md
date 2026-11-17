@@ -36,3 +36,5 @@ use the editor.
 - Role permissions (pages per role, outlet scope) live in `src/lib/access.ts` as pure functions covered by `src/test/access.test.ts`; sidebar, page gate and dashboard scope all read from it. Why: one source of truth for Owner/Manager/Cashier access.
 - Pure dashboard calculations live in `src/lib/dashboard/metrics.ts`; business dates are `YYYY-MM-DD` keys in the business timezone (`src/lib/dates.ts`). Why: identical SSR/browser output and testable math.
 - The app shell (sidebar + header + access gate) wraps `<Outlet />` in `src/routes/__root.tsx`; nav items are defined once in `src/components/layout/nav-config.ts`.
+- Auth lives in `src/lib/session.tsx` (the only `onAuthStateChange` listener and the only SessionProvider); after Supabase sign-in the `profiles` row is validated by pure `checkProfile` in `src/lib/auth-profile.ts` (tested). Preview users remain the fallback while signed out. Why: one session source, testable role/active rules.
+- `/auth` is the login page and renders outside the app shell (`BARE_PATHS` in `app-shell.tsx`). Why: login must not show the sidebar or access gate.
