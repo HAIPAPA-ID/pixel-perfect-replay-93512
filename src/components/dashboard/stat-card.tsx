@@ -34,7 +34,7 @@ export function StatCard({ label, value, growth, comparison, icon: Icon, tone = 
             <Icon className="size-[18px]" />
           </div>
         </div>
-        <div className="mt-4 text-[28px] font-extrabold leading-none tracking-tight tabular">{value}</div>
+        <div className="mt-4 whitespace-nowrap text-[26px] font-extrabold leading-none tracking-tight tabular xl:text-[22px] 2xl:text-[26px]">{value}</div>
         <div className="mt-3 flex items-center gap-2 text-xs opacity-90">
           <GrowthBadge value={growth} className="bg-primary-foreground/15 text-primary-foreground" />
           <span>{comparison}</span>
