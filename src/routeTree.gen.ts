@@ -10,33 +10,180 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BookingRouteImport } from './routes/booking'
+import { Route as CapsterRouteImport } from './routes/capster'
+import { Route as KasirRouteImport } from './routes/kasir'
+import { Route as LaporanRouteImport } from './routes/laporan'
+import { Route as OutletRouteImport } from './routes/outlet'
+import { Route as PelangganRouteImport } from './routes/pelanggan'
+import { Route as PengeluaranRouteImport } from './routes/pengeluaran'
+import { Route as ProdukRouteImport } from './routes/produk'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as TransaksiRouteImport } from './routes/transaksi'
+import { Route as UsersRouteImport } from './routes/users'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BookingRoute = BookingRouteImport.update({
+  id: '/booking',
+  path: '/booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CapsterRoute = CapsterRouteImport.update({
+  id: '/capster',
+  path: '/capster',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KasirRoute = KasirRouteImport.update({
+  id: '/kasir',
+  path: '/kasir',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaporanRoute = LaporanRouteImport.update({
+  id: '/laporan',
+  path: '/laporan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OutletRoute = OutletRouteImport.update({
+  id: '/outlet',
+  path: '/outlet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PelangganRoute = PelangganRouteImport.update({
+  id: '/pelanggan',
+  path: '/pelanggan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PengeluaranRoute = PengeluaranRouteImport.update({
+  id: '/pengeluaran',
+  path: '/pengeluaran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProdukRoute = ProdukRouteImport.update({
+  id: '/produk',
+  path: '/produk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransaksiRoute = TransaksiRouteImport.update({
+  id: '/transaksi',
+  path: '/transaksi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsersRoute = UsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/booking': typeof BookingRoute
+  '/capster': typeof CapsterRoute
+  '/kasir': typeof KasirRoute
+  '/laporan': typeof LaporanRoute
+  '/outlet': typeof OutletRoute
+  '/pelanggan': typeof PelangganRoute
+  '/pengeluaran': typeof PengeluaranRoute
+  '/produk': typeof ProdukRoute
+  '/settings': typeof SettingsRoute
+  '/transaksi': typeof TransaksiRoute
+  '/users': typeof UsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/booking': typeof BookingRoute
+  '/capster': typeof CapsterRoute
+  '/kasir': typeof KasirRoute
+  '/laporan': typeof LaporanRoute
+  '/outlet': typeof OutletRoute
+  '/pelanggan': typeof PelangganRoute
+  '/pengeluaran': typeof PengeluaranRoute
+  '/produk': typeof ProdukRoute
+  '/settings': typeof SettingsRoute
+  '/transaksi': typeof TransaksiRoute
+  '/users': typeof UsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/booking': typeof BookingRoute
+  '/capster': typeof CapsterRoute
+  '/kasir': typeof KasirRoute
+  '/laporan': typeof LaporanRoute
+  '/outlet': typeof OutletRoute
+  '/pelanggan': typeof PelangganRoute
+  '/pengeluaran': typeof PengeluaranRoute
+  '/produk': typeof ProdukRoute
+  '/settings': typeof SettingsRoute
+  '/transaksi': typeof TransaksiRoute
+  '/users': typeof UsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/booking'
+    | '/capster'
+    | '/kasir'
+    | '/laporan'
+    | '/outlet'
+    | '/pelanggan'
+    | '/pengeluaran'
+    | '/produk'
+    | '/settings'
+    | '/transaksi'
+    | '/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/booking'
+    | '/capster'
+    | '/kasir'
+    | '/laporan'
+    | '/outlet'
+    | '/pelanggan'
+    | '/pengeluaran'
+    | '/produk'
+    | '/settings'
+    | '/transaksi'
+    | '/users'
+  id:
+    | '__root__'
+    | '/'
+    | '/booking'
+    | '/capster'
+    | '/kasir'
+    | '/laporan'
+    | '/outlet'
+    | '/pelanggan'
+    | '/pengeluaran'
+    | '/produk'
+    | '/settings'
+    | '/transaksi'
+    | '/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BookingRoute: typeof BookingRoute
+  CapsterRoute: typeof CapsterRoute
+  KasirRoute: typeof KasirRoute
+  LaporanRoute: typeof LaporanRoute
+  OutletRoute: typeof OutletRoute
+  PelangganRoute: typeof PelangganRoute
+  PengeluaranRoute: typeof PengeluaranRoute
+  ProdukRoute: typeof ProdukRoute
+  SettingsRoute: typeof SettingsRoute
+  TransaksiRoute: typeof TransaksiRoute
+  UsersRoute: typeof UsersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +195,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/booking': {
+      id: '/booking'
+      path: '/booking'
+      fullPath: '/booking'
+      preLoaderRoute: typeof BookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/capster': {
+      id: '/capster'
+      path: '/capster'
+      fullPath: '/capster'
+      preLoaderRoute: typeof CapsterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kasir': {
+      id: '/kasir'
+      path: '/kasir'
+      fullPath: '/kasir'
+      preLoaderRoute: typeof KasirRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/laporan': {
+      id: '/laporan'
+      path: '/laporan'
+      fullPath: '/laporan'
+      preLoaderRoute: typeof LaporanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/outlet': {
+      id: '/outlet'
+      path: '/outlet'
+      fullPath: '/outlet'
+      preLoaderRoute: typeof OutletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pelanggan': {
+      id: '/pelanggan'
+      path: '/pelanggan'
+      fullPath: '/pelanggan'
+      preLoaderRoute: typeof PelangganRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pengeluaran': {
+      id: '/pengeluaran'
+      path: '/pengeluaran'
+      fullPath: '/pengeluaran'
+      preLoaderRoute: typeof PengeluaranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produk': {
+      id: '/produk'
+      path: '/produk'
+      fullPath: '/produk'
+      preLoaderRoute: typeof ProdukRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transaksi': {
+      id: '/transaksi'
+      path: '/transaksi'
+      fullPath: '/transaksi'
+      preLoaderRoute: typeof TransaksiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/users': {
+      id: '/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof UsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BookingRoute: BookingRoute,
+  CapsterRoute: CapsterRoute,
+  KasirRoute: KasirRoute,
+  LaporanRoute: LaporanRoute,
+  OutletRoute: OutletRoute,
+  PelangganRoute: PelangganRoute,
+  PengeluaranRoute: PengeluaranRoute,
+  ProdukRoute: ProdukRoute,
+  SettingsRoute: SettingsRoute,
+  TransaksiRoute: TransaksiRoute,
+  UsersRoute: UsersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

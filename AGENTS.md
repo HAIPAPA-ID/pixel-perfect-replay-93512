@@ -28,3 +28,11 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- Dashboard data flows through `src/lib/data/*` query options returning `DashboardDataset` (with `source: "mock" | "live"`); components never import mock data directly, so connecting the real backend only replaces fetchers. Why: swap mock → live without UI changes.
+- Temporary mock data lives only in `src/lib/mock/` and the UI must show a visible "Data contoh" notice whenever `source === "mock"`. Why: mock numbers must never look like real business figures.
+- Role permissions (pages per role, outlet scope) live in `src/lib/access.ts` as pure functions covered by `src/test/access.test.ts`; sidebar, page gate and dashboard scope all read from it. Why: one source of truth for Owner/Manager/Cashier access.
+- Pure dashboard calculations live in `src/lib/dashboard/metrics.ts`; business dates are `YYYY-MM-DD` keys in the business timezone (`src/lib/dates.ts`). Why: identical SSR/browser output and testable math.
+- The app shell (sidebar + header + access gate) wraps `<Outlet />` in `src/routes/__root.tsx`; nav items are defined once in `src/components/layout/nav-config.ts`.
