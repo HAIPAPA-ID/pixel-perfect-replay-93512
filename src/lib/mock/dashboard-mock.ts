@@ -51,7 +51,7 @@ function seeded(input: string): number {
   return (h >>> 0) / 4294967296;
 }
 
-const WEEKDAY_FACTOR = [1.32, 0.82, 0.86, 0.9, 0.95, 1.14, 1.42]; // Sun..Sat
+const WEEKDAY_FACTOR = [1.32, 0.82, 0.86, 0.9, 0.95, 1.14, 1.42] as const; // Sun..Sat
 
 export function buildMockDataset(today: DayKey): DashboardDataset {
   const daily: DailyOutletStat[] = [];
@@ -60,8 +60,9 @@ export function buildMockDataset(today: DayKey): DashboardDataset {
     const trend = 1 + ((HISTORY_DAYS - offset) / HISTORY_DAYS) * 0.18;
     for (const outlet of MOCK_OUTLETS) {
       const p = OUTLET_PROFILE[outlet.id];
+      if (!p) continue;
       const noise = 0.84 + seeded(`${date}:${outlet.id}`) * 0.32;
-      const revenue = Math.round((p.base * WEEKDAY_FACTOR[dayOfWeek(date)] * trend * noise) / 1000) * 1000;
+      const revenue = Math.round((p.base * (WEEKDAY_FACTOR[dayOfWeek(date)] ?? 1) * trend * noise) / 1000) * 1000;
       const transactions = Math.max(1, Math.round(revenue / p.ticket));
       const customers = Math.round(transactions * (0.9 + seeded(`c:${date}:${outlet.id}`) * 0.06));
       const expenses = Math.round(p.fixedCost + revenue * (0.16 + seeded(`e:${date}:${outlet.id}`) * 0.06));

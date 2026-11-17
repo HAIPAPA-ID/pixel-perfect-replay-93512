@@ -15,8 +15,13 @@ export function todayKey(now: Date = new Date()): DayKey {
   }).format(now);
 }
 
+function parseKey(key: DayKey): [number, number, number] {
+  const [y = 1970, m = 1, d = 1] = key.split("-").map(Number);
+  return [y, m, d];
+}
+
 export function keyToUTCDate(key: DayKey): Date {
-  const [y, m, d] = key.split("-").map(Number);
+  const [y, m, d] = parseKey(key);
   return new Date(Date.UTC(y, m - 1, d, 12));
 }
 
@@ -57,7 +62,7 @@ export function localDateToKey(date: Date): DayKey {
 }
 
 export function keyToLocalDate(key: DayKey): Date {
-  const [y, m, d] = key.split("-").map(Number);
+  const [y, m, d] = parseKey(key);
   return new Date(y, m - 1, d);
 }
 

@@ -18,7 +18,8 @@ const GRANULARITY_LABEL: Record<Granularity, string> = {
 
 function RevenueTooltip({ active, payload }: TooltipProps<number, string>) {
   if (!active || !payload?.length) return null;
-  const p = payload[0].payload as SeriesPoint;
+  const p = payload[0]?.payload as SeriesPoint | undefined;
+  if (!p) return null;
   return (
     <div className="rounded-xl border bg-popover px-3 py-2 text-xs shadow-lift">
       <div className="font-semibold">{p.label}</div>
