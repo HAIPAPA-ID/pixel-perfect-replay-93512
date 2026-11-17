@@ -95,7 +95,7 @@ export function AppHeader() {
 
       {isPreview ? (
         <Button asChild size="sm" className="gap-1.5 rounded-full" disabled={authStatus === "loading"}>
-          <Link to="/auth">
+          <Link to="/auth" aria-label="Masuk">
             <LogIn className="size-3.5" />
             <span className="hidden sm:inline">Masuk</span>
           </Link>
