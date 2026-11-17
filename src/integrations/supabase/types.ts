@@ -14,6 +14,128 @@ export type Database = {
   }
   public: {
     Tables: {
+      barber_cash_advance_payments: {
+        Row: {
+          amount: number
+          cash_advance_id: string
+          commission_payment_id: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          payment_date: string
+          payment_type: string
+          recorded_by: string
+        }
+        Insert: {
+          amount: number
+          cash_advance_id: string
+          commission_payment_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          payment_type?: string
+          recorded_by: string
+        }
+        Update: {
+          amount?: number
+          cash_advance_id?: string
+          commission_payment_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          payment_type?: string
+          recorded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "barber_cash_advance_payments_cash_advance_id_fkey"
+            columns: ["cash_advance_id"]
+            isOneToOne: false
+            referencedRelation: "barber_cash_advances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "barber_cash_advance_payments_commission_payment_id_fkey"
+            columns: ["commission_payment_id"]
+            isOneToOne: false
+            referencedRelation: "commission_payments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "barber_cash_advance_payments_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      barber_cash_advances: {
+        Row: {
+          advance_date: string
+          amount: number
+          barber_id: string
+          created_at: string
+          disbursement_method: string
+          id: string
+          notes: string | null
+          outlet_id: string
+          recorded_by: string
+          remaining_amount: number
+          status: string
+        }
+        Insert: {
+          advance_date?: string
+          amount: number
+          barber_id: string
+          created_at?: string
+          disbursement_method?: string
+          id?: string
+          notes?: string | null
+          outlet_id: string
+          recorded_by: string
+          remaining_amount: number
+          status?: string
+        }
+        Update: {
+          advance_date?: string
+          amount?: number
+          barber_id?: string
+          created_at?: string
+          disbursement_method?: string
+          id?: string
+          notes?: string | null
+          outlet_id?: string
+          recorded_by?: string
+          remaining_amount?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "barber_cash_advances_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "barber_cash_advances_outlet_id_fkey"
+            columns: ["outlet_id"]
+            isOneToOne: false
+            referencedRelation: "outlets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "barber_cash_advances_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       barber_service_prices: {
         Row: {
           barber_id: string
@@ -88,6 +210,394 @@ export type Database = {
           },
         ]
       }
+      cash_approval_requests: {
+        Row: {
+          amount: number
+          approved_at: string | null
+          approved_by: string | null
+          barber_id: string | null
+          cash_advance_id: string | null
+          cash_session_id: string | null
+          cashier_approved_at: string | null
+          cashier_approved_by: string | null
+          cashier_id: string
+          category: string | null
+          created_at: string
+          description: string
+          expense_id: string | null
+          id: string
+          notes: string | null
+          outlet_id: string
+          owner_approved_at: string | null
+          owner_approved_by: string | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
+          request_type: string
+          requested_by: string
+          requester_role: string
+          status: string
+        }
+        Insert: {
+          amount: number
+          approved_at?: string | null
+          approved_by?: string | null
+          barber_id?: string | null
+          cash_advance_id?: string | null
+          cash_session_id?: string | null
+          cashier_approved_at?: string | null
+          cashier_approved_by?: string | null
+          cashier_id: string
+          category?: string | null
+          created_at?: string
+          description: string
+          expense_id?: string | null
+          id?: string
+          notes?: string | null
+          outlet_id: string
+          owner_approved_at?: string | null
+          owner_approved_by?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          request_type: string
+          requested_by: string
+          requester_role: string
+          status?: string
+        }
+        Update: {
+          amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          barber_id?: string | null
+          cash_advance_id?: string | null
+          cash_session_id?: string | null
+          cashier_approved_at?: string | null
+          cashier_approved_by?: string | null
+          cashier_id?: string
+          category?: string | null
+          created_at?: string
+          description?: string
+          expense_id?: string | null
+          id?: string
+          notes?: string | null
+          outlet_id?: string
+          owner_approved_at?: string | null
+          owner_approved_by?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          request_type?: string
+          requested_by?: string
+          requester_role?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_approval_cash_session_fkey"
+            columns: ["cash_session_id"]
+            isOneToOne: false
+            referencedRelation: "cash_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_cashier_approved_by_fkey"
+            columns: ["cashier_approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_owner_approved_by_fkey"
+            columns: ["owner_approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_requests_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_requests_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_requests_cash_advance_id_fkey"
+            columns: ["cash_advance_id"]
+            isOneToOne: false
+            referencedRelation: "barber_cash_advances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_requests_cashier_id_fkey"
+            columns: ["cashier_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_requests_expense_id_fkey"
+            columns: ["expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_requests_outlet_id_fkey"
+            columns: ["outlet_id"]
+            isOneToOne: false
+            referencedRelation: "outlets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_requests_rejected_by_fkey"
+            columns: ["rejected_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_approval_requests_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cash_deposits: {
+        Row: {
+          amount: number
+          bank_reference: string | null
+          cash_movement_id: string | null
+          cash_session_id: string | null
+          cashier_id: string
+          confirmed_at: string | null
+          confirmed_by: string | null
+          created_at: string
+          deposit_destination: string
+          deposit_method: string
+          deposited_at: string
+          id: string
+          notes: string | null
+          outlet_id: string
+          recipient_name: string | null
+          status: string
+        }
+        Insert: {
+          amount: number
+          bank_reference?: string | null
+          cash_movement_id?: string | null
+          cash_session_id?: string | null
+          cashier_id: string
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          deposit_destination: string
+          deposit_method?: string
+          deposited_at?: string
+          id?: string
+          notes?: string | null
+          outlet_id: string
+          recipient_name?: string | null
+          status?: string
+        }
+        Update: {
+          amount?: number
+          bank_reference?: string | null
+          cash_movement_id?: string | null
+          cash_session_id?: string | null
+          cashier_id?: string
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          deposit_destination?: string
+          deposit_method?: string
+          deposited_at?: string
+          id?: string
+          notes?: string | null
+          outlet_id?: string
+          recipient_name?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_deposits_cash_movement_id_fkey"
+            columns: ["cash_movement_id"]
+            isOneToOne: false
+            referencedRelation: "cash_movements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_deposits_cash_session_id_fkey"
+            columns: ["cash_session_id"]
+            isOneToOne: false
+            referencedRelation: "cash_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_deposits_cashier_id_fkey"
+            columns: ["cashier_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_deposits_confirmed_by_fkey"
+            columns: ["confirmed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_deposits_outlet_id_fkey"
+            columns: ["outlet_id"]
+            isOneToOne: false
+            referencedRelation: "outlets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cash_movements: {
+        Row: {
+          amount: number
+          cash_session_id: string | null
+          cashier_id: string
+          created_at: string
+          description: string | null
+          direction: string
+          id: string
+          movement_date: string
+          movement_type: string
+          outlet_id: string
+          reference_id: string | null
+          source_id: string | null
+          source_type: string | null
+        }
+        Insert: {
+          amount: number
+          cash_session_id?: string | null
+          cashier_id: string
+          created_at?: string
+          description?: string | null
+          direction: string
+          id?: string
+          movement_date?: string
+          movement_type: string
+          outlet_id: string
+          reference_id?: string | null
+          source_id?: string | null
+          source_type?: string | null
+        }
+        Update: {
+          amount?: number
+          cash_session_id?: string | null
+          cashier_id?: string
+          created_at?: string
+          description?: string | null
+          direction?: string
+          id?: string
+          movement_date?: string
+          movement_type?: string
+          outlet_id?: string
+          reference_id?: string | null
+          source_id?: string | null
+          source_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_movements_cash_session_id_fkey"
+            columns: ["cash_session_id"]
+            isOneToOne: false
+            referencedRelation: "cash_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_movements_cashier_id_fkey"
+            columns: ["cashier_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_movements_outlet_id_fkey"
+            columns: ["outlet_id"]
+            isOneToOne: false
+            referencedRelation: "outlets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cash_sessions: {
+        Row: {
+          actual_closing_balance: number | null
+          cash_difference: number | null
+          cashier_id: string
+          closed_at: string | null
+          created_at: string
+          expected_closing_balance: number | null
+          id: string
+          notes: string | null
+          opened_at: string
+          opening_balance: number
+          outlet_id: string
+          session_date: string
+          status: string
+        }
+        Insert: {
+          actual_closing_balance?: number | null
+          cash_difference?: number | null
+          cashier_id: string
+          closed_at?: string | null
+          created_at?: string
+          expected_closing_balance?: number | null
+          id?: string
+          notes?: string | null
+          opened_at?: string
+          opening_balance?: number
+          outlet_id: string
+          session_date: string
+          status?: string
+        }
+        Update: {
+          actual_closing_balance?: number | null
+          cash_difference?: number | null
+          cashier_id?: string
+          closed_at?: string | null
+          created_at?: string
+          expected_closing_balance?: number | null
+          id?: string
+          notes?: string | null
+          opened_at?: string
+          opening_balance?: number
+          outlet_id?: string
+          session_date?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_sessions_cashier_id_fkey"
+            columns: ["cashier_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_sessions_outlet_id_fkey"
+            columns: ["outlet_id"]
+            isOneToOne: false
+            referencedRelation: "outlets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       colors: {
         Row: {
           blue: number | null
@@ -132,6 +642,167 @@ export type Database = {
           val_hsv?: number | null
         }
         Relationships: []
+      }
+      commission_payment_items: {
+        Row: {
+          amount: number
+          commission_id: string
+          commission_payment_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          amount: number
+          commission_id: string
+          commission_payment_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          amount?: number
+          commission_id?: string
+          commission_payment_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_payment_items_commission_id_fkey"
+            columns: ["commission_id"]
+            isOneToOne: false
+            referencedRelation: "commissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_payment_items_commission_payment_id_fkey"
+            columns: ["commission_payment_id"]
+            isOneToOne: false
+            referencedRelation: "commission_payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commission_payments: {
+        Row: {
+          amount: number
+          barber_id: string
+          created_at: string
+          debt_deduction: number
+          id: string
+          net_amount: number | null
+          notes: string | null
+          outlet_id: string
+          paid_by: string
+          payment_date: string
+          payment_method: string
+          period_end: string | null
+          period_start: string | null
+        }
+        Insert: {
+          amount: number
+          barber_id: string
+          created_at?: string
+          debt_deduction?: number
+          id?: string
+          net_amount?: number | null
+          notes?: string | null
+          outlet_id: string
+          paid_by: string
+          payment_date?: string
+          payment_method: string
+          period_end?: string | null
+          period_start?: string | null
+        }
+        Update: {
+          amount?: number
+          barber_id?: string
+          created_at?: string
+          debt_deduction?: number
+          id?: string
+          net_amount?: number | null
+          notes?: string | null
+          outlet_id?: string
+          paid_by?: string
+          payment_date?: string
+          payment_method?: string
+          period_end?: string | null
+          period_start?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_payments_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_payments_outlet_id_fkey"
+            columns: ["outlet_id"]
+            isOneToOne: false
+            referencedRelation: "outlets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_payments_paid_by_fkey"
+            columns: ["paid_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commission_settings: {
+        Row: {
+          barber_id: string | null
+          commission_rate: number
+          id: string
+          is_active: boolean
+          outlet_id: string
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          barber_id?: string | null
+          commission_rate?: number
+          id?: string
+          is_active?: boolean
+          outlet_id: string
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          barber_id?: string | null
+          commission_rate?: number
+          id?: string
+          is_active?: boolean
+          outlet_id?: string
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_settings_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_settings_outlet_id_fkey"
+            columns: ["outlet_id"]
+            isOneToOne: false
+            referencedRelation: "outlets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_settings_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       commissions: {
         Row: {
@@ -197,7 +868,7 @@ export type Database = {
           full_name: string
           id: string
           notes: string | null
-          phone: string | null
+          phone: string
           updated_at: string
         }
         Insert: {
@@ -205,7 +876,7 @@ export type Database = {
           full_name: string
           id?: string
           notes?: string | null
-          phone?: string | null
+          phone: string
           updated_at?: string
         }
         Update: {
@@ -213,7 +884,7 @@ export type Database = {
           full_name?: string
           id?: string
           notes?: string | null
-          phone?: string | null
+          phone?: string
           updated_at?: string
         }
         Relationships: []
@@ -221,6 +892,7 @@ export type Database = {
       expenses: {
         Row: {
           amount: number
+          cashier_id: string | null
           category: string
           created_at: string
           description: string | null
@@ -228,9 +900,11 @@ export type Database = {
           expense_date: string
           id: string
           outlet_id: string
+          payment_method: string
         }
         Insert: {
           amount: number
+          cashier_id?: string | null
           category: string
           created_at?: string
           description?: string | null
@@ -238,9 +912,11 @@ export type Database = {
           expense_date?: string
           id?: string
           outlet_id: string
+          payment_method?: string
         }
         Update: {
           amount?: number
+          cashier_id?: string | null
           category?: string
           created_at?: string
           description?: string | null
@@ -248,8 +924,16 @@ export type Database = {
           expense_date?: string
           id?: string
           outlet_id?: string
+          payment_method?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "expenses_cashier_id_fkey"
+            columns: ["cashier_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "expenses_entered_by_fkey"
             columns: ["entered_by"]
@@ -271,24 +955,30 @@ export type Database = {
           commission_rate: number
           id: string
           is_active: boolean
+          max_price: number | null
           outlet_id: string
           price: number
+          price_type: string
           service_id: string
         }
         Insert: {
           commission_rate?: number
           id?: string
           is_active?: boolean
+          max_price?: number | null
           outlet_id: string
           price: number
+          price_type?: string
           service_id: string
         }
         Update: {
           commission_rate?: number
           id?: string
           is_active?: boolean
+          max_price?: number | null
           outlet_id?: string
           price?: number
+          price_type?: string
           service_id?: string
         }
         Relationships: [
@@ -316,6 +1006,7 @@ export type Database = {
           id: string
           is_active: boolean
           name: string
+          timezone: string
         }
         Insert: {
           address?: string | null
@@ -324,6 +1015,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           name: string
+          timezone?: string
         }
         Update: {
           address?: string | null
@@ -332,6 +1024,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           name?: string
+          timezone?: string
         }
         Relationships: []
       }
@@ -452,6 +1145,7 @@ export type Database = {
       }
       transactions: {
         Row: {
+          cash_session_id: string | null
           cashier_id: string
           created_at: string
           customer_id: string
@@ -470,6 +1164,7 @@ export type Database = {
           void_requested_by: string | null
         }
         Insert: {
+          cash_session_id?: string | null
           cashier_id: string
           created_at?: string
           customer_id: string
@@ -488,6 +1183,7 @@ export type Database = {
           void_requested_by?: string | null
         }
         Update: {
+          cash_session_id?: string | null
           cashier_id?: string
           created_at?: string
           customer_id?: string
@@ -506,6 +1202,13 @@ export type Database = {
           void_requested_by?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "transactions_cash_session_id_fkey"
+            columns: ["cash_session_id"]
+            isOneToOne: false
+            referencedRelation: "cash_sessions"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "transactions_cashier_id_fkey"
             columns: ["cashier_id"]
@@ -578,7 +1281,140 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      approve_cash_approval: { Args: { p_request_id: string }; Returns: string }
+      can_access_outlet: {
+        Args: { target_outlet_id: string }
+        Returns: boolean
+      }
+      can_manage_outlet: {
+        Args: { target_outlet_id: string }
+        Returns: boolean
+      }
+      close_cash_session: {
+        Args: {
+          p_actual_closing_balance: number
+          p_notes?: string
+          p_session_id: string
+        }
+        Returns: number
+      }
+      confirm_cash_deposit: { Args: { p_deposit_id: string }; Returns: string }
+      current_user_role: { Args: never; Returns: string }
+      get_cashier_cash_balance: {
+        Args: { p_cashier_id: string; p_outlet_id: string }
+        Returns: number
+      }
+      open_cash_session: {
+        Args: {
+          p_notes?: string
+          p_opening_balance?: number
+          p_outlet_id: string
+        }
+        Returns: string
+      }
+      pay_barber_commission:
+        | {
+            Args: {
+              p_barber_id: string
+              p_items: Json
+              p_notes: string
+              p_outlet_id: string
+              p_payment_method: string
+              p_period_end: string
+              p_period_start: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_barber_id: string
+              p_debt_deduction: number
+              p_items: Json
+              p_notes: string
+              p_outlet_id: string
+              p_payment_method: string
+              p_period_end: string
+              p_period_start: string
+            }
+            Returns: string
+          }
+      record_barber_cash_advance:
+        | {
+            Args: {
+              p_amount: number
+              p_barber_id: string
+              p_notes?: string
+              p_outlet_id: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_amount: number
+              p_barber_id: string
+              p_disbursement_method?: string
+              p_notes?: string
+              p_outlet_id: string
+            }
+            Returns: string
+          }
+      record_cash_deposit: {
+        Args: {
+          p_amount: number
+          p_bank_reference?: string
+          p_deposit_destination: string
+          p_deposit_method?: string
+          p_notes?: string
+          p_outlet_id: string
+          p_recipient_name?: string
+        }
+        Returns: string
+      }
+      record_operational_expense: {
+        Args: {
+          p_amount: number
+          p_cashier_id?: string
+          p_category: string
+          p_description: string
+          p_outlet_id: string
+          p_payment_method: string
+        }
+        Returns: string
+      }
+      record_owner_barber_debt_transfer: {
+        Args: {
+          p_amount: number
+          p_barber_id: string
+          p_notes?: string
+          p_outlet_id: string
+        }
+        Returns: string
+      }
+      reject_cash_approval: {
+        Args: { p_rejection_reason: string; p_request_id: string }
+        Returns: string
+      }
+      reject_cash_deposit: {
+        Args: { p_deposit_id: string; p_reason: string }
+        Returns: string
+      }
+      request_cash_approval: {
+        Args: {
+          p_amount: number
+          p_barber_id?: string
+          p_cashier_id: string
+          p_category?: string
+          p_description: string
+          p_notes?: string
+          p_outlet_id: string
+          p_request_type: string
+        }
+        Returns: string
+      }
+      sync_transaction_commissions: {
+        Args: { p_transaction_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       color_source:
