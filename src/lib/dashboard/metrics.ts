@@ -8,7 +8,7 @@ import {
   weekStartKey,
   type DayKey,
 } from "@/lib/dates";
-import type { Barber, DailyOutletStat, Outlet } from "@/lib/data/types";
+import type { Barber, DailyBarberStat, DailyOutletStat, Outlet } from "@/lib/data/types";
 
 export interface DateRange {
   from: DayKey;
@@ -196,17 +196,44 @@ export function buildBarberRanking(
   outlets: Outlet[],
   outletIds: readonly string[],
   commissionRate: number,
+  barberDaily?: DailyBarberStat[],
 ): BarberPerformance[] {
   const ids = new Set(outletIds);
+  if (barberDaily) {
+    const totals = new Map<string, { haircuts: number; revenue: number; commission: number }>();
+    for (const row of barberDaily) {
+      if (!ids.has(row.outletId) || !inRange(row.date, range)) continue;
+      const current = totals.get(row.barberId) ?? { haircuts: 0, revenue: 0, commission: 0 };
+      current.haircuts += row.haircuts;
+      current.revenue += row.revenue;
+      current.commission += row.commission;
+      totals.set(row.barberId, current);
+    }
+    return barbers
+      .filter((barber) => ids.has(barber.outletId))
+      .map((barber) => {
+        const total = totals.get(barber.id) ?? { haircuts: 0, revenue: 0, commission: 0 };
+        return {
+          barber,
+          outlet: outlets.find((outlet) => outlet.id === barber.outletId),
+          haircuts: total.haircuts,
+          revenue: total.revenue,
+          commission: total.commission,
+        };
+      })
+      .sort((a, b) => b.revenue - a.revenue);
+  }
+
+  // Backward-compatible mock-only distribution.
   return barbers
-    .filter((b) => ids.has(b.outletId))
+    .filter((barber) => ids.has(barber.outletId))
     .map((barber) => {
-      const t = sumTotals(daily, range, [barber.outletId]);
-      const revenue = Math.round(t.revenue * barber.share);
+      const totals = sumTotals(daily, range, [barber.outletId]);
+      const revenue = Math.round(totals.revenue * barber.share);
       return {
         barber,
-        outlet: outlets.find((o) => o.id === barber.outletId),
-        haircuts: Math.round(t.transactions * barber.share),
+        outlet: outlets.find((outlet) => outlet.id === barber.outletId),
+        haircuts: Math.round(totals.transactions * barber.share),
         revenue,
         commission: Math.round(revenue * commissionRate),
       };
