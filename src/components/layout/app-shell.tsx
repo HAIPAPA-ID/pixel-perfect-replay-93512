@@ -9,9 +9,14 @@ import { AppHeader } from "./app-header";
 import { AppSidebar } from "./app-sidebar";
 import { NAV_ITEMS } from "./nav-config";
 
+/** Pages rendered without the sidebar/header shell. */
+const BARE_PATHS = ["/auth"];
+
 export function AppShell({ children }: { children: ReactNode }) {
   const { user } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (BARE_PATHS.includes(pathname)) return <>{children}</>;
+
   const isAppPage = NAV_ITEMS.some((i) =>
     i.path === "/" ? pathname === "/" : pathname.startsWith(i.path),
   );

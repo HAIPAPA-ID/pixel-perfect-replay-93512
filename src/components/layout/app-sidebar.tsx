@@ -22,7 +22,7 @@ import { NAV_GROUP_LABEL, NAV_ITEMS, type NavItem } from "./nav-config";
 const GROUPS = Object.keys(NAV_GROUP_LABEL) as NavItem["group"][];
 
 export function AppSidebar() {
-  const { user } = useSession();
+  const { user, isPreview } = useSession();
   const { setOpenMobile, isMobile } = useSidebar();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -80,6 +80,9 @@ export function AppSidebar() {
         <div className="rounded-xl border bg-card p-3 text-xs">
           <div className="font-semibold">{user.name}</div>
           <div className="mt-0.5 text-muted-foreground">Peran: {ROLE_LABEL[user.role]}</div>
+          {isPreview && (
+            <div className="mt-1.5 font-medium text-highlight">Mode pratinjau — belum login</div>
+          )}
         </div>
       </SidebarFooter>
       <SidebarRail />
