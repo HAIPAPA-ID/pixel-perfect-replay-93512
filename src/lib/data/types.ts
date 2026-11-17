@@ -1,6 +1,5 @@
 /**
- * Domain shapes the dashboard consumes. When the real backend is connected,
- * map its rows into these types inside src/lib/data/* — components stay unchanged.
+ * Domain shapes consumed by the dashboard.
  */
 import type { DayKey } from "@/lib/dates";
 
@@ -17,11 +16,10 @@ export interface Barber {
   id: string;
   name: string;
   outletId: string;
-  /** Share of the outlet's services this barber handles (0–1). Mock-only helper. */
+  /** Mock-only distribution helper; live ranking uses actual item rows. */
   share: number;
 }
 
-/** One outlet's totals for one business day. */
 export interface DailyOutletStat {
   date: DayKey;
   outletId: string;
@@ -31,6 +29,15 @@ export interface DailyOutletStat {
   expenses: number;
 }
 
+export interface DailyBarberStat {
+  date: DayKey;
+  outletId: string;
+  barberId: string;
+  haircuts: number;
+  revenue: number;
+  commission: number;
+}
+
 export interface DashboardDataset {
   source: DataSource;
   today: DayKey;
@@ -38,4 +45,6 @@ export interface DashboardDataset {
   outlets: Outlet[];
   barbers: Barber[];
   daily: DailyOutletStat[];
+  /** Actual transaction-item totals, grouped by business day and barber. */
+  barberDaily?: DailyBarberStat[];
 }
