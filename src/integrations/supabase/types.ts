@@ -210,6 +210,134 @@ export type Database = {
           },
         ]
       }
+      bookings: {
+        Row: {
+          barber_id: string | null
+          booking_code: string
+          booking_date: string
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          confirmed_at: string | null
+          confirmed_by: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          customer_name: string
+          customer_notes: string | null
+          customer_phone: string
+          end_time: string | null
+          id: string
+          internal_notes: string | null
+          outlet_id: string
+          service_id: string | null
+          source: string
+          start_time: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          barber_id?: string | null
+          booking_code: string
+          booking_date: string
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          customer_name: string
+          customer_notes?: string | null
+          customer_phone: string
+          end_time?: string | null
+          id?: string
+          internal_notes?: string | null
+          outlet_id: string
+          service_id?: string | null
+          source?: string
+          start_time: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          barber_id?: string | null
+          booking_code?: string
+          booking_date?: string
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          customer_name?: string
+          customer_notes?: string | null
+          customer_phone?: string
+          end_time?: string | null
+          id?: string
+          internal_notes?: string | null
+          outlet_id?: string
+          service_id?: string | null
+          source?: string
+          start_time?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_cancelled_by_fkey"
+            columns: ["cancelled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_confirmed_by_fkey"
+            columns: ["confirmed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_outlet_id_fkey"
+            columns: ["outlet_id"]
+            isOneToOne: false
+            referencedRelation: "outlets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cash_approval_requests: {
         Row: {
           amount: number
@@ -1161,6 +1289,10 @@ export type Database = {
           total_amount: number
           void_approved_by: string | null
           void_reason: string | null
+          void_rejected_at: string | null
+          void_rejected_by: string | null
+          void_rejection_reason: string | null
+          void_request_type: string | null
           void_requested_by: string | null
         }
         Insert: {
@@ -1180,6 +1312,10 @@ export type Database = {
           total_amount: number
           void_approved_by?: string | null
           void_reason?: string | null
+          void_rejected_at?: string | null
+          void_rejected_by?: string | null
+          void_rejection_reason?: string | null
+          void_request_type?: string | null
           void_requested_by?: string | null
         }
         Update: {
@@ -1199,6 +1335,10 @@ export type Database = {
           total_amount?: number
           void_approved_by?: string | null
           void_reason?: string | null
+          void_rejected_at?: string | null
+          void_rejected_by?: string | null
+          void_rejection_reason?: string | null
+          void_request_type?: string | null
           void_requested_by?: string | null
         }
         Relationships: [
@@ -1233,6 +1373,13 @@ export type Database = {
           {
             foreignKeyName: "transactions_void_approved_by_fkey"
             columns: ["void_approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_void_rejected_by_fkey"
+            columns: ["void_rejected_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1282,6 +1429,10 @@ export type Database = {
     }
     Functions: {
       approve_cash_approval: { Args: { p_request_id: string }; Returns: string }
+      approve_transaction_void_or_refund: {
+        Args: { p_transaction_id: string }
+        Returns: Json
+      }
       can_access_outlet: {
         Args: { target_outlet_id: string }
         Returns: boolean
@@ -1299,11 +1450,24 @@ export type Database = {
         Returns: number
       }
       confirm_cash_deposit: { Args: { p_deposit_id: string }; Returns: string }
+      create_pos_transaction: {
+        Args: {
+          p_cash_session_id: string
+          p_customer_name: string
+          p_customer_phone: string
+          p_discount_amount?: number
+          p_items?: Json
+          p_outlet_id: string
+          p_payment_method: string
+        }
+        Returns: Json
+      }
       current_user_role: { Args: never; Returns: string }
       get_cashier_cash_balance: {
         Args: { p_cashier_id: string; p_outlet_id: string }
         Returns: number
       }
+      get_public_booking_options: { Args: never; Returns: Json }
       open_cash_session: {
         Args: {
           p_notes?: string
@@ -1398,6 +1562,10 @@ export type Database = {
         Args: { p_deposit_id: string; p_reason: string }
         Returns: string
       }
+      reject_transaction_void_or_refund: {
+        Args: { p_rejection_reason: string; p_transaction_id: string }
+        Returns: Json
+      }
       request_cash_approval: {
         Args: {
           p_amount: number
@@ -1410,6 +1578,27 @@ export type Database = {
           p_request_type: string
         }
         Returns: string
+      }
+      request_transaction_void_or_refund: {
+        Args: {
+          p_reason: string
+          p_request_type: string
+          p_transaction_id: string
+        }
+        Returns: Json
+      }
+      submit_public_booking: {
+        Args: {
+          p_barber_id: string
+          p_booking_date: string
+          p_customer_name: string
+          p_customer_notes?: string
+          p_customer_phone: string
+          p_outlet_id: string
+          p_service_id: string
+          p_start_time: string
+        }
+        Returns: Json
       }
       sync_transaction_commissions: {
         Args: { p_transaction_id: string }
