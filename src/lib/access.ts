@@ -68,12 +68,47 @@ export interface SessionUser {
   id: string;
   name: string;
   role: Role;
-  /** Assigned outlet. Required for manager and cashier; ignored for owner. */
-  outletId: string | null;
+  /**
+   * Outlets the database lets this user access (read from `outlets` under RLS).
+   * Ignored for owner, who sees every outlet.
+   */
+  outletIds: string[];
 }
 
 /** Outlet ids this user may see, given every outlet in the business. */
 export function visibleOutletIds(user: SessionUser, allOutletIds: readonly string[]): string[] {
   if (canViewAllOutlets(user.role)) return [...allOutletIds];
-  return user.outletId && allOutletIds.includes(user.outletId) ? [user.outletId] : [];
+  return allOutletIds.filter((id) => user.outletIds.includes(id));
+}
+
+/** Selection value meaning "every outlet this user may access". */
+export const ALL_OUTLETS = "all";
+
+/** Owner always may combine outlets; a manager only when assigned to more than one; a cashier never. */
+export function canChooseAllOutlets(role: Role, accessibleCount: number): boolean {
+  if (role === "owner") return true;
+  if (role === "manager") return accessibleCount > 1;
+  return false;
+}
+
+/**
+ * Picks the active outlet selection from a stored preference.
+ * Falls back to "all" when allowed, otherwise the first accessible outlet, otherwise "".
+ */
+export function resolveOutletSelection(
+  role: Role,
+  accessibleIds: readonly string[],
+  stored: string | null | undefined,
+): string {
+  const allowAll = canChooseAllOutlets(role, accessibleIds.length);
+  if (stored === ALL_OUTLETS && allowAll) return ALL_OUTLETS;
+  if (stored && accessibleIds.includes(stored)) return stored;
+  if (allowAll) return ALL_OUTLETS;
+  return accessibleIds[0] ?? "";
+}
+
+/** Outlet ids covered by a selection; never wider than what the user may access. */
+export function outletScope(selection: string, accessibleIds: readonly string[]): string[] {
+  if (selection === ALL_OUTLETS) return [...accessibleIds];
+  return accessibleIds.includes(selection) ? [selection] : [];
 }

@@ -11,9 +11,9 @@ import type { Role, SessionUser } from "@/lib/access";
 import { checkProfile, signInErrorMessage, type ProfileCheck } from "@/lib/auth-profile";
 
 export const PREVIEW_USERS: Record<Role, SessionUser> = {
-  owner: { id: "preview-owner", name: "Owner (contoh)", role: "owner", outletId: null },
-  manager: { id: "preview-manager", name: "Manager (contoh)", role: "manager", outletId: "out-1" },
-  cashier: { id: "preview-cashier", name: "Kasir (contoh)", role: "cashier", outletId: "out-2" },
+  owner: { id: "preview-owner", name: "Owner (contoh)", role: "owner", outletIds: [] },
+  manager: { id: "preview-manager", name: "Manager (contoh)", role: "manager", outletIds: [] },
+  cashier: { id: "preview-cashier", name: "Kasir (contoh)", role: "cashier", outletIds: [] },
 };
 
 export type AuthStatus = "loading" | "signed_in" | "signed_out";
@@ -48,16 +48,14 @@ async function loadSessionUser(userId: string): Promise<{ check: ProfileCheck; u
   const check = checkProfile(data);
   if (!check.ok) return { check };
 
-  let outletId: string | null = null;
+  // user_outlets is readable by owners only, so assigned outlets come from `outlets`,
+  // whose RLS (can_access_outlet) returns exactly the outlets this account may use.
+  let outletIds: string[] = [];
   if (check.role !== "owner") {
-    const { data: links } = await supabase
-      .from("user_outlets")
-      .select("outlet_id")
-      .eq("user_id", userId)
-      .limit(1);
-    outletId = links?.[0]?.outlet_id ?? null;
+    const { data: rows } = await supabase.from("outlets").select("id");
+    outletIds = (rows ?? []).map((r) => r.id);
   }
-  return { check, user: { id: userId, name: check.name, role: check.role, outletId } };
+  return { check, user: { id: userId, name: check.name, role: check.role, outletIds } };
 }
 
 export function SessionProvider({ children }: { children: ReactNode }) {

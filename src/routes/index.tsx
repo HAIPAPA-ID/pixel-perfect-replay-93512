@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { OwnerDashboard } from "@/components/dashboard/owner-dashboard";
-import { dashboardQueryOptions } from "@/lib/data/dashboard";
+import { DashboardPage } from "@/components/dashboard/owner-dashboard";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,6 +19,6 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(dashboardQueryOptions()),
-  component: OwnerDashboard,
+  // No loader: data needs the browser login session and RLS, so it loads after sign-in.
+  component: DashboardPage,
 });

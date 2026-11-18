@@ -48,8 +48,8 @@ function PublicBookingPage() {
       else {
         const result = data as BookingOptions;
         setOptions(result);
-        if (result.outlets.length) setOutletId(result.outlets[0].id);
-        if (result.services.length) setServiceId(result.services[0].id);
+        setOutletId(result.outlets[0]?.id ?? "");
+        setServiceId(result.services[0]?.id ?? "");
       }
       setLoading(false);
     })();

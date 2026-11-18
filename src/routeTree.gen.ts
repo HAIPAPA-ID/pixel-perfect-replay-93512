@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BookRouteImport } from './routes/book'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as CapsterRouteImport } from './routes/capster'
 import { Route as KasirRouteImport } from './routes/kasir'
@@ -31,6 +32,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingRoute = BookingRouteImport.update({
@@ -92,6 +98,7 @@ const UsersRoute = UsersRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/booking': typeof BookingRoute
   '/capster': typeof CapsterRoute
   '/kasir': typeof KasirRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/booking': typeof BookingRoute
   '/capster': typeof CapsterRoute
   '/kasir': typeof KasirRoute
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/booking': typeof BookingRoute
   '/capster': typeof CapsterRoute
   '/kasir': typeof KasirRoute
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/book'
     | '/booking'
     | '/capster'
     | '/kasir'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/book'
     | '/booking'
     | '/capster'
     | '/kasir'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auth'
+    | '/book'
     | '/booking'
     | '/capster'
     | '/kasir'
@@ -186,6 +198,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  BookRoute: typeof BookRoute
   BookingRoute: typeof BookingRoute
   CapsterRoute: typeof CapsterRoute
   KasirRoute: typeof KasirRoute
@@ -213,6 +226,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/booking': {
@@ -298,6 +318,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  BookRoute: BookRoute,
   BookingRoute: BookingRoute,
   CapsterRoute: CapsterRoute,
   KasirRoute: KasirRoute,

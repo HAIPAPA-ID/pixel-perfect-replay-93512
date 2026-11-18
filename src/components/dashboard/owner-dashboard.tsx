@@ -1,10 +1,14 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, CalendarRange, Receipt, Sun, Users } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { canViewAllOutlets, visibleOutletIds } from "@/lib/access";
+import { DataError, NoOutletAssigned, PageLoading } from "@/components/layout/data-state";
+import { SignInRequired } from "@/components/layout/sign-in-required";
+import { ALL_OUTLETS, canViewAllOutlets } from "@/lib/access";
 import { dashboardQueryOptions } from "@/lib/data/dashboard";
+import type { DashboardDataset } from "@/lib/data/types";
+import { useOutlets } from "@/lib/outlet-context";
 import {
   buildBarberRanking,
   buildFinancials,
@@ -21,28 +25,45 @@ import { useSession } from "@/lib/session";
 import { DateRangeFilter, PRESET_LABEL, rangeForPreset, type RangePreset } from "./date-range-filter";
 import { FinancialOverview } from "./financial-overview";
 import { MockDataNotice } from "./mock-data-notice";
-import { ALL_OUTLETS, OutletFilter } from "./outlet-filter";
 import { OutletPerformance } from "./outlet-performance";
 import { RevenueChart } from "./revenue-chart";
 import { StatCard } from "./stat-card";
 import { TopBarbers } from "./top-barbers";
 
-export function OwnerDashboard() {
-  const { data } = useSuspenseQuery(dashboardQueryOptions());
+/** Dashboard entry: business data only loads for a real signed-in account. */
+export function DashboardPage() {
+  const { authStatus, isPreview } = useSession();
+  if (authStatus === "loading") return <PageLoading label="Memeriksa sesi login…" />;
+  if (isPreview) return <SignInRequired what="dashboard" />;
+  return <LiveDashboard />;
+}
+
+function LiveDashboard() {
   const { user } = useSession();
+  const outlets = useOutlets();
+  const query = useQuery(dashboardQueryOptions(user.id));
+
+  if (outlets.isLoading || query.isLoading) return <PageLoading />;
+  if (outlets.error) return <DataError error={outlets.error} />;
+  if (query.error || !query.data) return <DataError error={query.error} onRetry={() => void query.refetch()} />;
+  if (outlets.outlets.length === 0) return <NoOutletAssigned />;
+  return <OwnerDashboard data={query.data} />;
+}
+
+function OwnerDashboard({ data }: { data: DashboardDataset }) {
+  const { user } = useSession();
+  const { scope, selection, outlets: accessible } = useOutlets();
 
   const [preset, setPreset] = useState<RangePreset>("30d");
   const [range, setRange] = useState<DateRange>(() => rangeForPreset("30d", data.today));
   const [granularity, setGranularity] = useState<Granularity>("daily");
-  const [outletChoice, setOutletChoice] = useState<string>(ALL_OUTLETS);
 
-  const allOutletIds = data.outlets.map((o) => o.id);
-  const permitted = visibleOutletIds(user, allOutletIds);
   const isOwner = canViewAllOutlets(user.role);
-  const scope =
-    isOwner && outletChoice !== ALL_OUTLETS && permitted.includes(outletChoice) ? [outletChoice] : permitted;
   const scopedOutlets = data.outlets.filter((o) => scope.includes(o.id));
-  const permittedOutlets = data.outlets.filter((o) => permitted.includes(o.id));
+  const scopeLabel =
+    selection === ALL_OUTLETS
+      ? `${isOwner ? "Semua outlet" : "Semua outlet saya"} · ${accessible.length} outlet`
+      : (accessible.find((o) => o.id === selection)?.name ?? "");
 
   const rangeLabel =
     preset === "custom"
@@ -77,15 +98,12 @@ export function OwnerDashboard() {
             </h1>
             {data.source === "mock" && <Badge variant="mock">Data contoh</Badge>}
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">{formatLongDay(data.today)}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {formatLongDay(data.today)}
+            {scopeLabel && ` · ${scopeLabel}`}
+          </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <OutletFilter
-            outlets={permittedOutlets}
-            value={outletChoice}
-            onChange={setOutletChoice}
-            locked={!isOwner}
-          />
           <DateRangeFilter
             preset={preset}
             range={range}

@@ -16,6 +16,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ROLE_HOME, ROLE_LABEL, type Role } from "@/lib/access";
 import { useSession } from "@/lib/session";
 import { navItemFor } from "./nav-config";
+import { OutletSwitcher } from "./outlet-switcher";
 
 const ROLE_HINT: Record<Role, string> = {
   owner: "Semua outlet & laporan",
@@ -54,6 +55,8 @@ export function AppHeader() {
         </div>
       </div>
 
+      <OutletSwitcher />
+
       {isPreview && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -66,7 +69,7 @@ export function AppHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-64">
             <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-              Pratinjau peran — tanpa login (data contoh)
+              Pratinjau menu per peran — data asli hanya tampil setelah login
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {(Object.keys(ROLE_LABEL) as Role[]).map((role) => (
@@ -89,7 +92,7 @@ export function AppHeader() {
         </DropdownMenu>
       )}
 
-      <Button variant="ghost" size="icon" className="rounded-full" aria-label="Notifikasi">
+      <Button variant="ghost" size="icon" className="hidden rounded-full sm:inline-flex" aria-label="Notifikasi">
         <Bell className="size-[18px]" />
       </Button>
 

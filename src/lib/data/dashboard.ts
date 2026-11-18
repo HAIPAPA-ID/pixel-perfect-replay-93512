@@ -182,9 +182,10 @@ async function fetchDashboardDataset(): Promise<DashboardDataset> {
   };
 }
 
-export const dashboardQueryOptions = () =>
+/** Keyed by user so signing in as someone else never reuses another account's figures. */
+export const dashboardQueryOptions = (userId: string) =>
   queryOptions({
-    queryKey: ["dashboard", "dataset", "live"],
+    queryKey: ["dashboard", "dataset", "live", userId],
     queryFn: fetchDashboardDataset,
     staleTime: 60_000,
   });
